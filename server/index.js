@@ -1,7 +1,8 @@
-const express = require('express');
+const app = require('./app');
 
-const app = express();
+const port = process.env.PORT || 6000;
 
 app.get('/', (req, res) => res.status(200).json({message: 'it is working'}));
 
-app.listen(5000, () => console.log('Listening on 5000'));
+app.listen(port, () => console.log(`Listening on ${port}`))
+   

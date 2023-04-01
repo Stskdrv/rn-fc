@@ -1,0 +1,26 @@
+{
+  "name": "rn-fc",
+  "version": "1.0.0",
+  "description": "fullstack react-native app",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd server && node index",
+    "server": "cd server && nodemon index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stskdrv/rn-fc.git"
+  },
+  "keywords": [
+    "expo", 
+    "react-native",
+    "node",
+    "express"
+  ],
+  "author": "Stanislav Kadyrov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Stskdrv/rn-fc/issues"
+  },
+  "homepage": "https://github.com/Stskdrv/rn-fc#readme"
+}
