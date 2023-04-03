@@ -1,3 +1,6 @@
+const User = require('../models/User');
+
+
 module.exports.signin = (req, res) => {
     res.status(200).json({
         signin: true
@@ -5,12 +8,12 @@ module.exports.signin = (req, res) => {
 };
 
 module.exports.signup = (req, res) => {
-    res.status(200).json({
-        signup: {
-            name: req.body.name,
-            email: req.body.email,
-            password: req.body.password,
-        }
-    });
+    const user = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+    })
+
+    user.save().then(() => console.log('User Created'));
 };
 
