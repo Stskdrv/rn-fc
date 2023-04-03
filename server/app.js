@@ -14,4 +14,4 @@ app.use(bodyParser.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/record', recordRoutes);
 
-module.exports = app;
+module.exports = app;  
