@@ -7,13 +7,24 @@ module.exports.signin = (req, res) => {
     });
 };
 
-module.exports.signup = (req, res) => {
-    const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-    })
+module.exports.signup = async (req, res) => {
+    const candidate = await User.findOne({ $or: [{ email: req.body.email }, { name: req.body.name }] });
+    //In this example, we are using the $or operator to search for users with either the specified email or name. The candidate variable will contain the user object if a user with the specified email or name is found in the database, or null if no user is found.
 
-    user.save().then(() => console.log('User Created'));
+    if (candidate) {
+        if (candidate.email === req.body.email) {
+            return res.status(409).json({
+                message: 'Email already exist, please signIn'
+            })
+        } else {
+            return res.status(409).json({
+                message: 'This name already exist, please choose another one.'
+            })
+        }
+    } else {
+        
+    }
+
+        
 };
 
