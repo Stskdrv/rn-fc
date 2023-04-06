@@ -1,4 +1,4 @@
-const { JWT_KEY } = require('../../config/keys');
+const { JWT_KEY, JWT_REF_KEY } = require('../../config/keys');
 const User = require('../models/User');
 
 const JWTStrategy = require('passport-jwt').Strategy;
@@ -7,6 +7,11 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const options = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),// we take token from header
     secretOrKey: JWT_KEY,
+};
+
+const refreshOptions = {
+    jwtFromRequest: ExtractJwt.fromHeader('x-refresh-token'),
+    secretOrKey: JWT_REF_KEY,
 };
 
 module.exports = (passport) => { // describe why we're exporting passport func and logic inside
@@ -24,5 +29,22 @@ module.exports = (passport) => { // describe why we're exporting passport func a
                 console.log(e);
             }
         })
-    )
+    ),
+    
+    passport.use(
+        'refresh-token',
+        new JWTStrategy(refreshOptions, async (payload, done) => {
+          try {
+            const user = await User.findById(payload.userId);
+      
+            if (user) {
+              done(null, user);
+            } else {
+              done(null, false);
+            }
+          } catch (e) {
+            console.log(e);
+          }
+        })
+      );
 }

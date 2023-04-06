@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { JWT_KEY } = require('../../config/keys');
 const errorHendler = require('../utils/errorHendler');
+const { generateRefreshToken } = require('./refreshToken.controller');
 
 
 module.exports.signin = async (req, res) => {
@@ -15,11 +16,17 @@ module.exports.signin = async (req, res) => {
             const token = jwt.sign({
                 name: candidate.name,
                 userId: candidate._id,
-            }, JWT_KEY, {expiresIn: 3600});
+            }, JWT_KEY, {expiresIn: 3});
+
+            const refreshToken = await generateRefreshToken(candidate._id);
+
+            // Save the refresh token to the database
+            await User.updateOne({ _id: candidate._id }, { refreshToken });
 
             return res.status(200).json({
                 token: `Bearer ${token}`,
-            })
+                refreshToken,
+            });
 
         } else {
             return res.status(404).json({
