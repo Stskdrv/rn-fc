@@ -21,7 +21,7 @@ module.exports.newRecord = async (req, res) => {
     }
 };
 
-module.exports.getById = (req, res) => {
+module.exports.getById = async (req, res) => {
     try {
         const record = await Record.findById(req.params.id);
         res.status(200).json(record);
