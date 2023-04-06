@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport');
-const controller = require('../controllers/record');
+const controller = require('../controllers/record.controller');
 
 const router = express.Router(); //create module router here
 

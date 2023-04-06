@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { JWT_KEY } = require('../../config/keys');
+const errorHendler = require('../utils/errorHendler');
 
 
 module.exports.signin = async (req, res) => {
@@ -68,7 +69,7 @@ module.exports.signup = async (req, res) => {
                 message: 'User was created'
             })
         }catch(e) {
-            //handle this errer
+            errorHendler(res, e);
         }
     }
 };
