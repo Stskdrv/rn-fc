@@ -11,22 +11,19 @@ const recordSchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    weather: {
-        minTemp: {
-            type: Number,
-            default: 0,
-        },
-        maxTemp: {
-            type: Number,
-            default: 0,
-        },
-        wind: {
-            type: Number,
-            default: 0,
-        }
-
+    mintemp: {
+        type: Number,
+        default: 0,
     },
-    photoSrc: {
+    maxtemp: {
+        type: Number,
+        default: 0,
+    },
+    wind: {
+        type: Number,
+        default: 0,
+    },
+    imgSrc: {
         type: String,
         default: '',
     },
