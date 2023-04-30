@@ -13,6 +13,7 @@ module.exports.getAll = async (req, res) => {
 };
 
 module.exports.newRecord = async (req, res) => {
+    console.log(req);
     const record = new Record({
         //date will be added by mongoose automatically
         user: req.user.id,
