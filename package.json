@@ -12,7 +12,7 @@
     "url": "git+https://github.com/Stskdrv/rn-fc.git"
   },
   "keywords": [
-    "expo", 
+    "expo",
     "react-native",
     "node",
     "express"
