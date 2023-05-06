@@ -1,9 +1,10 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import SignInForm from '../components/SignInForm';
 import AuthForm from '../components/AuthForm';
+import { Button } from 'native-base';
 
 
-export default SignInScreen = () => {
+export default SignInScreen = ({ navigation }) => {
 
   const handleSubmit = (values) => {
     if (values.name.includes('@')) {
@@ -19,7 +20,9 @@ export default SignInScreen = () => {
   return (
     <View style={styles.container}>
       <Image style={styles.logo} source={require('../assets/logoIcon.png')} />
-        <AuthForm handleSubmit={handleSubmit} type='SignIn' />
+      <AuthForm handleSubmit={handleSubmit} type='SignIn' />
+      <Text style={styles.text}>In you do nota have an account, please</Text>
+      <Button mt='5' alignSelf='center' w='35%' onPress={() => navigation.navigate('SignUp')}>go to Sign Up</Button>
     </View>
   );
 }
@@ -27,9 +30,13 @@ export default SignInScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#282B34',
+    backgroundColor: '#282B34'
   },
   logo: {
     alignSelf: 'flex-end',
+  },
+  text: {
+    color: 'gray',
+    textAlign: 'center'
   }
 });
