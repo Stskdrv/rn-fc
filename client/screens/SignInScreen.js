@@ -1,20 +1,22 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
-import SignInForm from '../components/SignInForm';
+import * as SecureStore from 'expo-secure-store';
 import AuthForm from '../components/AuthForm';
 import { Button } from 'native-base';
+import { signIn } from '../services/authService';
 
+const TOKEN_KEY = 'TOKEN_KEY';
 
 export default SignInScreen = ({ navigation }) => {
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     if (values.name.includes('@')) {
       const email = values.name;
       delete values.name;
       values.email = email;
     } else {
       delete values.email;
-    }
-    console.log(values);
+    };
+    await signIn(values);
   };
 
   return (
