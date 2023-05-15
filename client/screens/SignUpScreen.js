@@ -1,11 +1,14 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
-import SignUpForm from '../components/AuthForm';
 import AuthForm from '../components/AuthForm';
+import { signUp } from '../services/authService';
+import { Button } from 'native-base';
 
 
-export default SignUpScreen = () => {
+export default SignUpScreen = ({navigation}) => {
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
+    await signUp(values)
+      .then(() => navigation.navigate('SignIn'));
     console.log(values);
   };
 
@@ -13,6 +16,8 @@ export default SignUpScreen = () => {
     <View style={styles.container}>
       <Image style={styles.logo} source={require('../assets/logoIcon.png')} />
         <AuthForm handleSubmit={handleSubmit} type='SignUp' />
+        <Text style={styles.text}>In you already have an account, please</Text>
+      <Button mt='5' alignSelf='center' w='35%' onPress={() => navigation.navigate('SignIn')}>go to Sign In</Button>
     </View>
   );
 }
@@ -24,5 +29,9 @@ const styles = StyleSheet.create({
   },
   logo: {
     alignSelf: 'flex-end',
+  },
+  text: {
+    color: 'gray',
+    textAlign: 'center'
   }
 });

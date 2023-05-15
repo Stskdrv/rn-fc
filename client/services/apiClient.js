@@ -1,24 +1,35 @@
 import axios from 'axios';
-import EncryptedStorage from 'react-native-encrypted-storage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 const TOKEN_KEY = 'TOKEN_KEY';
 
 const apiClient = axios.create({
-  baseURL: '/api',  
+  baseURL: 'http://localhost:7000/api',  
   headers: {
     'Cache-Control': 'no-cache'
   },
 });
 
+export const setToken = async (token) => {
+    await SecureStore.setItemAsync(TOKEN_KEY, token);
+};
+
+const getToken = async (token) => {
+    await SecureStore.getItemAsync(TOKEN_KEY);
+};
+
 apiClient.interceptors.request.use(
     async (config) => {
-        const token = await EncryptedStorage.getItem(TOKEN_KEY);
-        if (token && config.url !== '/signin/' && config.url !== '/signup/') {
-            // TODO: check headers
-          config.headers['Authorization'] = `Bearer ${token}`;
+        try {
+            const token = getToken(TOKEN_KEY);
+            if (token && config.url !== '/signin/' && config.url !== '/signup/') {
+                // TODO: check headers
+              config.headers['Authorization'] = `Bearer ${token}`;
+            }
+            return config;
+        } catch (e) {
+            console.log(e, 'encrypted');
         }
-        return config;
       },
       (error) => {
         return Promise.reject(error);
@@ -32,7 +43,7 @@ apiClient.interceptors.response.use(
   async error => {
     if (error.response && error.response.status === 401) {
       // clear token and set isAuth to false
-      await EncryptedStorage.removeItem(TOKEN_KEY);
+      await SecureStore.deleteItemAsync(TOKEN_KEY);
       await AsyncStorage.setItem('isauth', false);
     }
     return Promise.reject(error);
