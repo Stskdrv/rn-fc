@@ -4,19 +4,29 @@ import { signUp } from '../services/authService';
 import { Button } from 'native-base';
 
 
-export default SignUpScreen = ({navigation}) => {
+export default SignUpScreen = ({ navigation }) => {
 
   const handleSubmit = async (values) => {
     await signUp(values)
-      .then(() => navigation.navigate('SignIn'));
-    console.log(values);
+      .then((response) => {
+        if (response.status === 201) {
+          navigation.navigate('SignIn')
+        }
+      })
+      .catch((error) => {
+        Toast.show({
+          title: error.response.data.message,
+          placement: 'top',
+          duration: 3000,
+        });
+      });
   };
 
   return (
     <View style={styles.container}>
       <Image style={styles.logo} source={require('../assets/logoIcon.png')} />
-        <AuthForm handleSubmit={handleSubmit} type='SignUp' />
-        <Text style={styles.text}>In you already have an account, please</Text>
+      <AuthForm handleSubmit={handleSubmit} type='SignUp' />
+      <Text style={styles.text}>In you already have an account, please</Text>
       <Button mt='5' alignSelf='center' w='35%' onPress={() => navigation.navigate('SignIn')}>go to Sign In</Button>
     </View>
   );

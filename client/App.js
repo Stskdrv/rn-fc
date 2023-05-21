@@ -4,6 +4,7 @@ import DefaultScreen from './screens/DefaultScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import SignInScreen from './screens/SignInScreen';
 import { NativeBaseProvider } from 'native-base';
+import HomeScreen from './screens/HomeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +16,7 @@ export default App = () => {
           <Stack.Screen name='Default' component={DefaultScreen} />
           <Stack.Screen name='SignUp' component={SignUpScreen} />
           <Stack.Screen name='SignIn' component={SignInScreen} />
+          <Stack.Screen name='Home' component={HomeScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
