@@ -5,18 +5,21 @@ import SignUpScreen from './screens/SignUpScreen';
 import SignInScreen from './screens/SignInScreen';
 import { NativeBaseProvider } from 'native-base';
 import HomeScreen from './screens/HomeScreen';
+import theme from './theme/theme';
+import ForecastScreen from './screens/ForecastScreen';
 
 const Stack = createNativeStackNavigator();
 
 export default App = () => {
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName='Default'>
           <Stack.Screen name='Default' component={DefaultScreen} />
           <Stack.Screen name='SignUp' component={SignUpScreen} />
           <Stack.Screen name='SignIn' component={SignInScreen} />
           <Stack.Screen name='Home' component={HomeScreen} />
+          <Stack.Screen name='Forecast' component={ForecastScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
