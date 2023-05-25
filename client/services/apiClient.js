@@ -15,6 +15,17 @@ export const setToken = async (token) => {
     await SecureStore.setItemAsync(TOKEN_KEY, token);
 };
 
+export const setUserName = async (name) => {
+    console.log(name);
+    await AsyncStorage.setItem('username', name);
+};
+
+export const getUserName = async () => {
+    const name =  await AsyncStorage.getItem('username');
+    console.log('get', name);
+   return name;
+};
+
 const getToken = async (tokenKey) => {
     await SecureStore.getItemAsync(tokenKey);
 };

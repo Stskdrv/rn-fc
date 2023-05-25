@@ -1,11 +1,29 @@
+import { useEffect, useState } from 'react';
 import { Image, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Box, TextArea, } from 'native-base';
 import ScreenTitle from '../components/ScreenTitle';
 import WeatherSection from '../components/weather/WeatherSection';
 import DetailsSection from '../components/details/DetailsSection';
 import ButtonIcon from '../components/ButtonIcon';
+import * as Location from 'expo-location';
+import { getUserName } from '../services/apiClient';
 
 export default HomeScreen = ({ navigation }) => {
+
+    const [userName, setUserName] = useState('friend');
+
+    useEffect(() => {
+        const handleUserName = async () => {
+            try {
+                const username = await getUserName();
+                setUserName(username);
+            } catch (error) {
+                console.log('Error fetching username from AsyncStorage:', error);
+            }
+        }
+        handleUserName();
+    }, []);
+
 
     const weatherData = [
         {
@@ -52,7 +70,7 @@ export default HomeScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <ScreenTitle title='Hey John, nice to meet you!' />
+            <ScreenTitle title={`Hey ${userName}, nice to meet you!`} />
             <Box flexDir='row'>
                 <Text style={styles.subtitleText}>
                     It is 19 of May, day!

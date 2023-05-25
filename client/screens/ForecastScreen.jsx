@@ -129,7 +129,7 @@ const ForecastScreen = ({ navigation }) => {
             />
 
 
-            <Box alignSelf='center' mb='7%'>
+            <Box alignSelf='center' mb='7%'  >
                 <ButtonIcon handleClick={() => navigation.navigate('Home')} iconPath={require('../assets/icons/homeIcon.png')} />
             </Box>
         </View>

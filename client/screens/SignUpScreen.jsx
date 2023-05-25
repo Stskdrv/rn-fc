@@ -27,7 +27,7 @@ export default SignUpScreen = ({ navigation }) => {
       <Image style={styles.logo} source={require('../assets/logoIcon.png')} />
       <AuthForm handleSubmit={handleSubmit} type='SignUp' />
       <Text style={styles.text}>In you already have an account, please</Text>
-      <Button mt='5' alignSelf='center' w='35%' onPress={() => navigation.navigate('SignIn')}>go to Sign In</Button>
+      <Button mt='5' alignSelf='center' w='35%' rounded='full' onPress={() => navigation.navigate('SignIn')}>go to Sign In</Button>
     </View>
   );
 }

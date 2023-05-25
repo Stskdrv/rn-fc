@@ -19,6 +19,7 @@ module.exports.signin = async (req, res) => {
 
             return res.status(200).json({
                 token: `Bearer ${token}`,
+                name: candidate.name,
             })
 
         } else {
