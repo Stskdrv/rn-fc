@@ -1,4 +1,5 @@
 import { StyleSheet, View, } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 import { Box, FlatList } from 'native-base';
 import ScreenTitle from '../components/ScreenTitle';
 import WeatherSection from '../components/weather/WeatherSection';
@@ -6,6 +7,8 @@ import SectionTitle from '../components/weather/SectionTitle';
 import ButtonIcon from '../components/ButtonIcon';
 
 const ForecastScreen = ({ navigation }) => {
+
+    const forecastData = useRoute().params;
 
     const weatherData = [
         {
@@ -116,16 +119,16 @@ const ForecastScreen = ({ navigation }) => {
             <ScreenTitle title='Forecast for next  four days:' />
 
             <FlatList
-                data={weatherData}
+                data={forecastData}
                 renderItem={({ item }) => {
                     return (
-                        <Box  p='4' >
+                        <Box  m='3' w='60%' alignSelf='center' >
                             <SectionTitle date={item.date} />
                             <WeatherSection weatherData={item.data} />
                         </Box>
                     )
                 }}
-                numColumns='2'
+                numColumns='1'
             />
 
 
