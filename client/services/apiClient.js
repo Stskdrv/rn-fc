@@ -16,7 +16,6 @@ export const setToken = async (token) => {
 };
 
 export const setUserName = async (name) => {
-    console.log(name);
     await AsyncStorage.setItem('username', name);
 };
 

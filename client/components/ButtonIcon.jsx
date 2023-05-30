@@ -3,9 +3,9 @@ import { StyleSheet } from 'react-native';
 import { Image, TouchableOpacity } from 'react-native';
 
 
-const ButtonIcon = ({ handleClick, iconPath }) => {
+const ButtonIcon = ({ handleClick, iconPath, disabled }) => {
     return (
-        <TouchableOpacity onPress={handleClick}>
+        <TouchableOpacity disabled={disabled} onPress={handleClick}>
             <Image
                 source={iconPath}
             />

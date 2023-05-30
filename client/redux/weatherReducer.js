@@ -5,12 +5,12 @@ import prepareResponse from '../utils/prepareResponse';
 
 export const fetchWeatherData = createAsyncThunk(
     'weatherData',
-    async (location) => {
+    async (location, {rejectWithValue}) => {
         try {
             const response = await getWeather(location);
             return response.data;
         } catch (e) {
-            return e.response.data.message;
+            return rejectWithValue(e.response.data.error.message);
         }
     }
 );
@@ -36,7 +36,7 @@ const weatherSlice = createSlice({
             })
             .addCase(fetchWeatherData.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
+                state.error = action.payload;
             })
     }
 });
