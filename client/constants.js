@@ -1,3 +1,10 @@
+
+export const LOADING = {
+    INITIAL: 'idle',
+    PENDING: 'pending',
+    FULFILLED: 'fulfilled',
+    REJECTED: 'rejected',
+};
 export const weatherIconsDictionary = {
     '113': require('./assets/icons/weatherIcons/113.png'),
     '116': require('./assets/icons/weatherIcons/116.png'),

@@ -12,6 +12,7 @@ import { fetchWeatherData, selectWeatherData } from '../redux/weatherReducer';
 import moment from 'moment';
 import ErrorSection from '../components/ErrorSection';
 import SkeletonLoader from '../components/SceletonLoader';
+import { LOADING } from '../constants';
 
 export default HomeScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -71,7 +72,7 @@ export default HomeScreen = ({ navigation }) => {
 
                     <View style={styles.middleSection}>
                         {
-                            !isLoading ?
+                            isLoading === LOADING.FULFILLED ?
                                 (
                                     <View>
                                         <WeatherSection weatherData={data?.currentDay.weatherData} />
