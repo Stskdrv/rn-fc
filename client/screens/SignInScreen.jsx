@@ -18,6 +18,7 @@ export default SignInScreen = ({ navigation }) => {
     await signIn(values)
       .then(async (response) => {
         const { token, name } = response.data;
+        console.log(token, 'SIGNINTOK');
         await setToken(token);
         await setUserName(name);
       })
@@ -27,7 +28,7 @@ export default SignInScreen = ({ navigation }) => {
           placement: 'top',
           duration: 3000,
         });
-      });;
+      });
   };
 
   return (
