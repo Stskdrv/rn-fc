@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Image, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { Box, TextArea, } from 'native-base';
+import { Box, Spinner, TextArea, Toast, } from 'native-base';
 import ScreenTitle from '../components/ScreenTitle';
 import WeatherSection from '../components/weather/WeatherSection';
 import DetailsSection from '../components/details/DetailsSection';
@@ -13,14 +13,19 @@ import moment from 'moment';
 import ErrorSection from '../components/ErrorSection';
 import SkeletonLoader from '../components/SceletonLoader';
 import { LOADING } from '../constants';
+import { postNewRecord, selectNewRecordData } from '../redux/recordReducer';
 
 export default HomeScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const { data, isLoading, error } = useSelector(selectWeatherData);
+    const { data: newRecordData,
+        isLoading: isNewRecordLoading,
+        error: newRecordError } = useSelector(selectNewRecordData);
 
     const [userName, setUserName] = useState('friend');
     const [location, setLocation] = useState();
     const [locationError, setLocationError] = useState();
+    const [description, setDescription] = useState();
 
     useEffect(() => {
         (async () => {
@@ -53,6 +58,36 @@ export default HomeScreen = ({ navigation }) => {
         handleUserName();
     }, []);
 
+    useEffect(() => {
+        if (isNewRecordLoading === LOADING.FULFILLED) {
+            Toast.show({
+                title: 'Record was created!',
+                placement: 'top',
+                duration: 3000,
+            });
+        }
+        if (isNewRecordLoading === LOADING.REJECTED) {
+            Toast.show({
+                title: newRecordError,
+                placement: 'top',
+                duration: 3000,
+            });
+        }
+    }, [isNewRecordLoading]);
+
+    const handleCreateNewRecord = () => {
+        // console.log(data);
+        const { mintemp, maxtemp, wind } = data.currentDay.recordData;
+        const params = {
+            mintemp,
+            maxtemp,
+            wind,
+            description,
+        };
+
+        dispatch(postNewRecord(params));
+    };
+
     return (
         <View style={styles.container}>
             <ScreenTitle title={`Hey ${userName}, nice to meet you!`} />
@@ -63,7 +98,7 @@ export default HomeScreen = ({ navigation }) => {
                         <Text style={styles.subtitleText}>
                             {`Today is ${moment(new Date).format("MMM Do")},`}
                         </Text>
-                        {!isLoading && <TouchableOpacity onPress={() => navigation.navigate('Forecast', data?.forecast)} >
+                        {isLoading === LOADING.FULFILLED && <TouchableOpacity onPress={() => navigation.navigate('Forecast', data?.forecast)} >
                             <Text style={styles.buttonText}>
                                 Check next days!
                             </Text>
@@ -91,6 +126,8 @@ export default HomeScreen = ({ navigation }) => {
                         </Text>
                         <TextArea
                             mt='2'
+                            value={description}
+                            onChangeText={text => setDescription(text)}
                             placeholder='Do you want to remember later in what clothes it was comfortable in this weather? Fill out this form!'
                             w='85%'
                             alignSelf='center'
@@ -102,9 +139,12 @@ export default HomeScreen = ({ navigation }) => {
                         />
                     </Box>
                     <Box flexDir='row' justifyContent='space-around' mt='7'>
-                        <ButtonIcon disabled={isLoading || error} handleClick={null} iconPath={require('../assets/icons/listIcon.png')} />
-                        <ButtonIcon disabled={isLoading  || error} handleClick={null} iconPath={require('../assets/icons/cameraIcon.png')} />
-                        <ButtonIcon disabled={isLoading  || error} handleClick={null} iconPath={require('../assets/icons/saveIcon.png')} />
+                        <ButtonIcon disabled={isLoading !== LOADING.FULFILLED || error} handleClick={null} iconPath={require('../assets/icons/listIcon.png')} />
+                        <ButtonIcon disabled={isLoading !== LOADING.FULFILLED || error} handleClick={null} iconPath={require('../assets/icons/cameraIcon.png')} />
+                        {isNewRecordLoading === LOADING.PENDING ?
+                            <Spinner color='primary.100' size="lg" /> :
+                            <ButtonIcon disabled={isLoading !== LOADING.FULFILLED || error || !description} handleClick={handleCreateNewRecord} iconPath={require('../assets/icons/saveIcon.png')} />
+                        }
                     </Box>
                 </>)
             }
