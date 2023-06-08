@@ -15,7 +15,7 @@ module.exports.signin = async (req, res) => {
             const token = jwt.sign({
                 name: candidate.name,
                 userId: candidate._id,
-            }, JWT_KEY, {expiresIn: 3600});
+            }, JWT_KEY, {expiresIn: 3600 * 24 * 3});
 
             return res.status(200).json({
                 token: `Bearer ${token}`,

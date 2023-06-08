@@ -61,7 +61,7 @@ export default HomeScreen = ({ navigation }) => {
     useEffect(() => {
         if (isNewRecordLoading === LOADING.FULFILLED) {
             Toast.show({
-                title: 'Record was created!',
+                title: newRecordData?.message,
                 placement: 'top',
                 duration: 3000,
             });
@@ -76,13 +76,14 @@ export default HomeScreen = ({ navigation }) => {
     }, [isNewRecordLoading]);
 
     const handleCreateNewRecord = () => {
-        // console.log(data);
-        const { mintemp, maxtemp, wind } = data.currentDay.recordData;
+        const currentDayData = data.currentDay;
+        const { mintemp, maxtemp, wind } = currentDayData.recordData;
         const params = {
             mintemp,
             maxtemp,
             wind,
             description,
+            weatherData: currentDayData.weatherData,
         };
 
         dispatch(postNewRecord(params));
