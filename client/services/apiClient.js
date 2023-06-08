@@ -12,7 +12,12 @@ const apiClient = axios.create({
 });
 
 export const setToken = async (token) => {
-    await SecureStore.setItemAsync(TOKEN_KEY, token);
+    try {
+        await SecureStore.setItemAsync(TOKEN_KEY, token);
+    } catch (e) {
+        console.log(e);
+    }
+    
 };
 
 export const setUserName = async (name) => {
@@ -21,21 +26,22 @@ export const setUserName = async (name) => {
 
 export const getUserName = async () => {
     const name =  await AsyncStorage.getItem('username');
-    console.log('get', name);
    return name;
 };
 
 const getToken = async (tokenKey) => {
-    await SecureStore.getItemAsync(tokenKey);
+    return await SecureStore.getItemAsync(tokenKey);
 };
 
 apiClient.interceptors.request.use(
     async (config) => {
         try {
             const token = await getToken(TOKEN_KEY);
+            console.log(token);
             if (token && config.url !== 'auth/signin/' && config.url !== 'auth/signup/') {
                 // TODO: check headers
-                config.headers['x-authorization'] = `Bearer ${token}`;
+                config.headers['Authorization'] = token;
+                console.log(config.headers, 'config.headers');
             }
             return config;
         } catch (e) {
@@ -54,8 +60,13 @@ apiClient.interceptors.response.use(
     async error => {
         if (error.response && error.response.status === 401) {
             // clear token and set isAuth to false
-            await SecureStore.deleteItemAsync(TOKEN_KEY);
-            await AsyncStorage.setItem('isauth', false);
+            try {
+                await SecureStore.deleteItemAsync(TOKEN_KEY);
+                await AsyncStorage.setItem('isauth', 'false');
+            } catch (e) {
+                console.log(e);
+            }
+           
         }
         return Promise.reject(error);
     }

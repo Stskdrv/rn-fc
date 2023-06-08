@@ -8,7 +8,7 @@ export const postNewRecord = createAsyncThunk(
     async (params, {rejectWithValue}) => {
         try {
             const response = await createRecord(params);
-            console.log(response.data, 'response.data');
+            console.log(response.data.data, 'response.data');
             return response.data;
         } catch (e) {
             console.log(e.response);
