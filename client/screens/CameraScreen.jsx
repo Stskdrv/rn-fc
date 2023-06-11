@@ -2,12 +2,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import ErrorSection from '../components/ErrorSection';
-import { Box, Spinner, Text } from 'native-base';
+import { Box, Spinner, Text, Toast } from 'native-base';
 import ButtonIcon from '../components/ButtonIcon';
-import ScreenTitle from '../components/ScreenTitle';
 import PhotoPreviewSection from '../components/PhotoPreviewSection';
+import { useRoute } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { postNewRecord } from '../redux/recordReducer';
+import { selectWeatherData } from '../redux/weatherReducer';
 
 const CameraScreen = ({ navigation }) => {
+
+  const { data } = useSelector(selectWeatherData);
+
+  const description = useRoute().params;
+
+  const dispatch = useDispatch();
+
   const [hasCameraPermission, setHasCameraPermission] = useState();
   const [permissionError, setPermissionError] = useState();
   const [cameraType, setCameraType] = useState(CameraType.back);
@@ -40,7 +50,23 @@ const CameraScreen = ({ navigation }) => {
 
   const toggleCameraType = () => {
     setCameraType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
-  }
+  };
+
+  const handleCreateNewRecordWithPhoto = () => {
+
+    const currentDayData = data.currentDay;
+    const { mintemp, maxtemp, wind } = currentDayData.recordData;
+    const params = {
+      mintemp,
+      maxtemp,
+      wind,
+      description,
+      weatherData: currentDayData.weatherData,
+      photo
+    };
+
+    dispatch(postNewRecord(params));
+  };
 
 
   if (hasCameraPermission === undefined) {
@@ -87,6 +113,7 @@ const CameraScreen = ({ navigation }) => {
       <PhotoPreviewSection
         photo={photo}
         handleRetakePhoto={handleRetakePhoto}
+        handleCreateNewRecordWithPhoto={handleCreateNewRecordWithPhoto}
         navigation={navigation}
       />
     );

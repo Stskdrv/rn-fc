@@ -20,7 +20,7 @@ require('./middleware/passport')(passport);
 app.use(morgan('dev'));
 app.use(require('cors')());
 
-app.use('/uploads', express.static('./uploads/'));
+app.use('/server/uploads', express.static('./server/uploads/'));
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
