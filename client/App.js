@@ -9,6 +9,7 @@ import theme from './theme/theme';
 import ForecastScreen from './screens/ForecastScreen';
 import { Provider } from 'react-redux';
 import store from './redux/store';
+import CameraScreen from './screens/CameraScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ export default App = () => {
             <Stack.Screen name='SignIn' component={SignInScreen} />
             <Stack.Screen name='Home' component={HomeScreen} />
             <Stack.Screen name='Forecast' component={ForecastScreen} />
+            <Stack.Screen name='Camera' component={CameraScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
