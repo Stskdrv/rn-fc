@@ -37,7 +37,6 @@ apiClient.interceptors.request.use(
     async (config) => {
         try {
             const token = await getToken(TOKEN_KEY);
-            console.log(token);
             if (token && config.url !== 'auth/signin/' && config.url !== 'auth/signup/') {
                 // TODO: check headers
                 config.headers['Authorization'] = token;

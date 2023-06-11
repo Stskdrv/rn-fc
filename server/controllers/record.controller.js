@@ -14,7 +14,9 @@ module.exports.getAll = async (req, res) => {
 
 module.exports.newRecord = async (req, res) => {
     const { user, body, file } = req;
-  
+
+    const data = req.file ? JSON.parse(body.data) : body;
+
     try {
       const existingRecord = await Record.findOne({
         user: user.id,
@@ -23,11 +25,11 @@ module.exports.newRecord = async (req, res) => {
   
       if (existingRecord) {
         existingRecord.imgSrc = file?.path  || '';
-        existingRecord.description = body.description;
-        existingRecord.mintemp = body.mintemp;
-        existingRecord.maxtemp = body.maxtemp;
-        existingRecord.wind = body.wind;
-        existingRecord.weatherData= body.weatherData;
+        existingRecord.description = data.description || '';
+        existingRecord.mintemp = data.mintemp;
+        existingRecord.maxtemp = data.maxtemp;
+        existingRecord.wind = data.wind;
+        existingRecord.weatherData= data.weatherData;
   
         await existingRecord.save();
         return res.status(200).json({ 
@@ -39,11 +41,11 @@ module.exports.newRecord = async (req, res) => {
       const record = new Record({
         user: user.id,
         imgSrc: file?.path || '',
-        description: body.description,
-        mintemp: body.mintemp,
-        maxtemp: body.maxtemp,
-        wind: body.wind,
-        weatherData: body.weatherData
+        description: data.description,
+        mintemp: data.mintemp,
+        maxtemp: data.maxtemp,
+        wind: data.wind,
+        weatherData: data.weatherData
       });
   
       await record.save();

@@ -6,7 +6,10 @@ import ButtonIcon from "./ButtonIcon";
 
 
 
-const PhotoPreviewSection = ({ photo, handleRetakePhoto, navigation }) => {
+const PhotoPreviewSection = ({ photo, 
+    handleRetakePhoto, 
+    handleCreateNewRecordWithPhoto, 
+    navigation }) => {
     return (
 
         <SafeAreaView style={styles.container}>
@@ -31,7 +34,7 @@ const PhotoPreviewSection = ({ photo, handleRetakePhoto, navigation }) => {
             <Box mt='4%' mb='5%' flexDir='row' justifyContent='space-around' >
                 <ButtonIcon handleClick={() => navigation.navigate('Home')} iconPath={require('../assets/icons/homeIcon.png')} />
                 <ButtonIcon handleClick={handleRetakePhoto} iconPath={require('../assets/icons/reCameraIcon.png')} />
-                <ButtonIcon handleClick={null} iconPath={require('../assets/icons/saveIcon.png')} />
+                <ButtonIcon handleClick={handleCreateNewRecordWithPhoto} iconPath={require('../assets/icons/saveIcon.png')} />
             </Box>
         </SafeAreaView>
     )
