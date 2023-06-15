@@ -140,7 +140,7 @@ export default HomeScreen = ({ navigation }) => {
                         />
                     </Box>
                     <Box flexDir='row' justifyContent='space-around' mt='7'>
-                        <ButtonIcon disabled={isLoading !== LOADING.FULFILLED || error} handleClick={null} iconPath={require('../assets/icons/listIcon.png')} />
+                        <ButtonIcon disabled={isLoading !== LOADING.FULFILLED || error} handleClick={() => navigation.navigate('List')} iconPath={require('../assets/icons/listIcon.png')} />
                         <ButtonIcon disabled={isLoading !== LOADING.FULFILLED || error} handleClick={() => navigation.navigate('Camera', description)} iconPath={require('../assets/icons/cameraIcon.png')} />
                         {isNewRecordLoading === LOADING.PENDING ?
                             <Spinner color='primary.100' size="lg" /> :

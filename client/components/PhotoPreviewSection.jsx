@@ -1,4 +1,3 @@
-// import { Image } from "react-native";
 import { SafeAreaView, Image, StyleSheet, View } from "react-native";
 import { Box } from 'native-base';
 import ButtonIcon from "./ButtonIcon";
