@@ -13,7 +13,7 @@ import moment from 'moment';
 import ErrorSection from '../components/ErrorSection';
 import SkeletonLoader from '../components/SceletonLoader';
 import { LOADING } from '../constants';
-import { postNewRecord, selectNewRecordData } from '../redux/recordReducer';
+import { postNewRecord, resetNewRecordLoadingState, selectNewRecordData } from '../redux/recordReducer';
 
 export default HomeScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -65,6 +65,7 @@ export default HomeScreen = ({ navigation }) => {
                 placement: 'top',
                 duration: 3000,
             });
+            dispatch(resetNewRecordLoadingState());
         }
         if (isNewRecordLoading === LOADING.REJECTED) {
             Toast.show({

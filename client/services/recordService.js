@@ -69,3 +69,7 @@ export const createRecord = async ({
 
     return apiClient.post('record/', params);
 };
+
+export const getAllRecords = () => {
+    return apiClient.get('record/');
+}

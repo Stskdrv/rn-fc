@@ -1,10 +1,18 @@
 import { Box, Text } from "native-base";
 import { StyleSheet, Image } from "react-native";
 import ButtonIcon from "./ButtonIcon";
+import { weatherIconsDictionary } from "../constants";
 
 
 
-const RecordItem = () => {
+const RecordItem = ({recordData}) => {
+
+    const {
+        mintemp,
+        maxtemp,
+        wind,
+        weatherData
+    } = recordData;
 
     const InfoBlock = ({ src, text }) => {
         console.log(text);
@@ -39,9 +47,9 @@ const RecordItem = () => {
             justifyContent='space-around'
             rounded='30%'
         >
-            <Image style={styles.weatherIcon} source={require('../assets/icons/weatherIcons/113.png')} />
-            <InfoBlock src={require('../assets/icons/tempIcon.png')} text='13°-18°' />
-            <InfoBlock src={require('../assets/icons/blackWindIcon.png')} text='3 km/h' />
+            <Image style={styles.weatherIcon} source={weatherIconsDictionary[weatherData[1]?.icon]} />
+            <InfoBlock src={require('../assets/icons/tempIcon.png')} text={`${mintemp}° - ${maxtemp}°`} />
+            <InfoBlock src={require('../assets/icons/blackWindIcon.png')} text={`${wind} km/h`} />
             <Box left='5'>
                 <ButtonIcon handleClick={null} iconPath={require('../assets/icons/arrowIcon.png')} />
             </Box>
