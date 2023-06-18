@@ -5,6 +5,9 @@ export const LOADING = {
     FULFILLED: 'fulfilled',
     REJECTED: 'rejected',
 };
+
+export const BASE_IMG_URL = 'http://localhost:7000/';
+
 export const weatherIconsDictionary = {
     '113': require('./assets/icons/weatherIcons/113.png'),
     '116': require('./assets/icons/weatherIcons/116.png'),

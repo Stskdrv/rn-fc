@@ -15,20 +15,25 @@ export default SignInScreen = ({ navigation }) => {
     } else {
       delete values.email;
     }
-    await signIn(values)
-      .then(async (response) => {
-        const { token, name } = response.data;
-        console.log(token, 'SIGNINTOK');
-        await setToken(token);
-        await setUserName(name);
-      })
-      .catch((error) => {
-        Toast.show({
-          title: error.response.data.message,
-          placement: 'top',
-          duration: 3000,
+
+    try {
+      await signIn(values)
+        .then(async (response) => {
+          const { token, name } = response.data;
+          console.log(token, 'SIGNINTOK');
+          await setToken(token);
+          await setUserName(name);
+        })
+        .catch((error) => {
+          Toast.show({
+            title: error.response?.data.message || String(error.message),
+            placement: 'top',
+            duration: 3000,
+          });
         });
-      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (

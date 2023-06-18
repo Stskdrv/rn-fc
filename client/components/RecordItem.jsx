@@ -2,16 +2,20 @@ import { Box, Text } from "native-base";
 import { StyleSheet, Image } from "react-native";
 import ButtonIcon from "./ButtonIcon";
 import { weatherIconsDictionary } from "../constants";
+import { useNavigation } from '@react-navigation/native';
 
 
 
 const RecordItem = ({recordData}) => {
-
+    const navigation = useNavigation();
+console.log(recordData);
     const {
         mintemp,
         maxtemp,
         wind,
-        weatherData
+        weatherData,//only in the end of lesson!
+        description, // only in the end of lesson!
+        imgSrc, //only in the end of lesson!
     } = recordData;
 
     const InfoBlock = ({ src, text }) => {
@@ -51,7 +55,13 @@ const RecordItem = ({recordData}) => {
             <InfoBlock src={require('../assets/icons/tempIcon.png')} text={`${mintemp}° - ${maxtemp}°`} />
             <InfoBlock src={require('../assets/icons/blackWindIcon.png')} text={`${wind} km/h`} />
             <Box left='5'>
-                <ButtonIcon handleClick={null} iconPath={require('../assets/icons/arrowIcon.png')} />
+                <ButtonIcon handleClick={() => navigation.navigate(
+                    'Details', {
+                        weatherData,
+                        description,
+                        imgSrc  
+                    }
+                )} iconPath={require('../assets/icons/arrowIcon.png')} />
             </Box>
         </Box>
     )
