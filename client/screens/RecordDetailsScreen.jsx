@@ -1,23 +1,34 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import ScreenTitle from "../components/ScreenTitle";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getUserName } from "../services/apiClient";
-import { Box, Image, Text } from "native-base";
+import { AlertDialog, Box, Button, Image, Spinner, Text, Toast } from "native-base";
 import moment from "moment";
 import ButtonIcon from "../components/ButtonIcon";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import WeatherSection from "../components/weather/WeatherSection";
-import { BASE_IMG_URL } from "../constants";
+import { BASE_IMG_URL, LOADING } from "../constants";
+import { useDispatch, useSelector } from "react-redux";
+import { removeRecord, resetRemoveRecordLoadingState, selectRemoveRecordData } from "../redux/recordReducer";
 
 
 const RecordDetailsScreen = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
 
-    const { weatherData, description, imgSrc } = useRoute().params;
+    const { isLoading, data, error } = useSelector(selectRemoveRecordData);
+
+    const { weatherData, description, imgSrc, _id } = useRoute().params;
     console.log(BASE_IMG_URL + imgSrc);
 
     const [userName, setUserName] = useState('friend');
     const [isPreviewMode, setIsPreviewMode] = useState(false);
+
+    const [isOpen, setIsOpen] = useState(false);
+
+    const toggleAlert = () => setIsOpen(!isOpen);
+
+    const cancelRef = useRef(null);
 
     const togglePreview = () => setIsPreviewMode(!isPreviewMode);
 
@@ -32,8 +43,28 @@ const RecordDetailsScreen = () => {
         handleUserName();
     }, []);
 
+    useEffect(() => {
+        if (isLoading === LOADING.FULFILLED) {
+            Toast.show({
+                title: data,
+                placement: 'top',
+                duration: 3000,
+            });
+            navigation.navigate('Home');
+        }
+        if (isLoading === LOADING.REJECTED) {
+            Toast.show({
+                title: error,
+                placement: 'top',
+                duration: 3000,
+            });
+        }
+
+        dispatch(resetRemoveRecordLoadingState());
+    }, [isLoading])
+
     const renderPreview = () => {
-        
+
         return (
             <TouchableOpacity onPress={togglePreview}>
                 <Box
@@ -118,7 +149,7 @@ const RecordDetailsScreen = () => {
                                     !imgSrc?.length ? require('../assets/placeHolderImg.png') : { uri: BASE_IMG_URL + imgSrc }
                                 }
                                 fallbackSource={require('../assets/placeHolderImg.png')}
-                                alt='Image not found' 
+                                alt='Image not found'
                             />
 
 
@@ -130,12 +161,36 @@ const RecordDetailsScreen = () => {
             <Box flexDir='row' justifyContent='space-around' mt='7'>
                 <ButtonIcon handleClick={() => navigation.navigate('List')} iconPath={require('../assets/icons/backIcon.png')} />
                 <ButtonIcon handleClick={() => navigation.navigate('Home')} iconPath={require('../assets/icons/homeIcon.png')} />
-                {/* {isNewRecordLoading === LOADING.PENDING ?
+                {isLoading === LOADING.PENDING ?
                     <Spinner color='primary.100' size="lg" /> :
-                    <ButtonIcon disabled={isLoading !== LOADING.FULFILLED || error || !description} handleClick={handleCreateNewRecord} iconPath={require('../assets/icons/saveIcon.png')} />
-                } */}
+                    <ButtonIcon handleClick={toggleAlert} iconPath={require('../assets/icons/deleteIcon.png')} />
+                }
             </Box>
 
+            <AlertDialog leastDestructiveRef={cancelRef} isOpen={isOpen} onClose={toggleAlert}>
+                <AlertDialog.Content color='primary.150'>
+                    <AlertDialog.CloseButton />
+                    <AlertDialog.Header>Delete Record</AlertDialog.Header>
+                    <AlertDialog.Body>
+                        This will remove this record. 
+                        This action cannot be reversed. 
+                        Are you sure?
+                    </AlertDialog.Body>
+                    <AlertDialog.Footer>
+                        <Button.Group space={2}>
+                            <Button variant="unstyled" colorScheme="coolGray" onPress={toggleAlert} ref={cancelRef}>
+                                Cancel
+                            </Button>
+                            <Button colorScheme="danger" onPress={() => {
+                                toggleAlert();
+                                dispatch(removeRecord(_id))
+                                }}>
+                                Delete
+                            </Button>
+                        </Button.Group>
+                    </AlertDialog.Footer>
+                </AlertDialog.Content>
+            </AlertDialog>
         </View>
     )
 

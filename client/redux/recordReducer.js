@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { LOADING } from "../constants";
-import { createRecord, getAllRecords } from "../services/recordService";
+import { createRecord, deleteRecord, getAllRecords } from "../services/recordService";
 
 
 export const postNewRecord = createAsyncThunk(
@@ -29,6 +29,19 @@ export const fetchAllRecords = createAsyncThunk(
     }
 );
 
+export const removeRecord = createAsyncThunk(
+    'removeRecord',
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await deleteRecord(id);
+            return response.data;
+        } catch (e) {
+            console.log(e.response.data);
+            return rejectWithValue(e.response.data.message || String(e.response.data));
+        }
+    }
+);
+
 const recordSlice = createSlice({
     name: 'record',
     initialState: {
@@ -41,11 +54,19 @@ const recordSlice = createSlice({
             isLoading: LOADING.INITIAL,
             data: null,
             error: null,
+        },
+        removeRecord: {
+            isLoading: LOADING.INITIAL,
+            data: null,
+            error: null,
         }
     },
     reducers: {
         resetNewRecordLoadingState: (state) => {
             state.newRecord.isLoading = LOADING.INITIAL;
+        },
+        resetRemoveRecordLoadingState: (state) => {
+            state.removeRecord.isLoading = LOADING.INITIAL;
         },
     },
     extraReducers: (builder) => {
@@ -73,6 +94,18 @@ const recordSlice = createSlice({
                 state.allRecords.error = action.payload;
                 state.allRecords.isLoading = LOADING.REJECTED;
             })
+
+            .addCase(removeRecord.pending, (state) => {
+                state.removeRecord.isLoading = LOADING.PENDING;
+            })
+            .addCase(removeRecord.fulfilled, (state, action) => {
+                state.removeRecord.data = action.payload;
+                state.removeRecord.isLoading = LOADING.FULFILLED;
+            })
+            .addCase(removeRecord.rejected, (state, action) => {
+                state.removeRecord.error = action.payload;
+                state.removeRecord.isLoading = LOADING.REJECTED;
+            })
     }
 });
 
@@ -80,6 +113,8 @@ export const selectNewRecordData = (state) => state.record.newRecord;
 
 export const selectAllRecordsData = (state) => state.record.allRecords;
 
-export const { resetNewRecordLoadingState } = recordSlice.actions;
+export const selectRemoveRecordData = (state) => state.record.removeRecord;
+
+export const { resetNewRecordLoadingState, resetRemoveRecordLoadingState } = recordSlice.actions;
 
 export default recordSlice.reducer;
