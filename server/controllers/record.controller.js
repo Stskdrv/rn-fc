@@ -91,7 +91,7 @@ module.exports.updRecord = async (req, res) => {
 
 module.exports.deleteRecord = async (req, res) => {
     try {
-        await Record.remove({_id: req.params.id});
+        await Record.deleteOne({_id: req.params.id});
         res.status(200).json('Record was removed');
     } catch (e) {
         errorHendler(res,e);

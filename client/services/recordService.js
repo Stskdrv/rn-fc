@@ -72,4 +72,8 @@ export const createRecord = async ({
 
 export const getAllRecords = () => {
     return apiClient.get('record/');
+};
+
+export const deleteRecord = (id) => {
+    return apiClient.delete(`record/${id}`);
 }

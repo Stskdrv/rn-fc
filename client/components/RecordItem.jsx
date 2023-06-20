@@ -16,6 +16,7 @@ console.log(recordData);
         weatherData,//only in the end of lesson!
         description, // only in the end of lesson!
         imgSrc, //only in the end of lesson!
+        _id,
     } = recordData;
 
     const InfoBlock = ({ src, text }) => {
@@ -59,7 +60,8 @@ console.log(recordData);
                     'Details', {
                         weatherData,
                         description,
-                        imgSrc  
+                        imgSrc,
+                        _id
                     }
                 )} iconPath={require('../assets/icons/arrowIcon.png')} />
             </Box>
