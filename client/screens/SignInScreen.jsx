@@ -4,8 +4,11 @@ import AuthForm from '../components/AuthForm';
 import { Button, Toast } from 'native-base';
 import { signIn } from '../services/authService';
 import { setToken, setUserName } from '../services/apiClient';
+import { useDispatch } from 'react-redux';
+import { setIsAuth } from '../redux/userReducer';
 
 export default SignInScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
 
   const handleSubmit = async (values) => {
     if (values.name.includes('@')) {
@@ -23,6 +26,7 @@ export default SignInScreen = ({ navigation }) => {
           console.log(token, 'SIGNINTOK');
           await setToken(token);
           await setUserName(name);
+          dispatch(setIsAuth(true));
         })
         .catch((error) => {
           Toast.show({
