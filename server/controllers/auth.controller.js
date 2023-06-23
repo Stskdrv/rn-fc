@@ -75,3 +75,26 @@ module.exports.signup = async (req, res) => {
     }
 };
 
+
+module.exports.validateToken = (req, res) => {
+    const token = req.headers.authorization;
+    
+    if (!token) {
+      return res.status(401).json({
+        message: 'No token provided',
+      });
+    }
+    
+    jwt.verify(token.split(' ')[1], JWT_KEY, (err) => {
+      if (err) {
+        console.log(err);
+        return res.status(403).json({
+          message: 'Invalid token',
+        });
+      }
+      
+      return res.status(200).json({
+        message: 'Token is valid',
+      });
+    });
+};

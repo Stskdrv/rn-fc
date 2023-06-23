@@ -1,6 +1,8 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import store from '../redux/store';
+import { setIsAuth } from '../redux/userReducer';
 
 const TOKEN_KEY = 'TOKEN_KEY';
 
@@ -33,6 +35,10 @@ const getToken = async (tokenKey) => {
     return await SecureStore.getItemAsync(tokenKey);
 };
 
+export const removeToken = async () => {
+    await SecureStore.deleteItemAsync(TOKEN_KEY);
+};
+
 apiClient.interceptors.request.use(
     async (config) => {
         try {
@@ -58,10 +64,9 @@ apiClient.interceptors.response.use(
     },
     async error => {
         if (error.response && error.response.status === 401) {
-            // clear token and set isAuth to false
             try {
-                await SecureStore.deleteItemAsync(TOKEN_KEY);
-                await AsyncStorage.setItem('isauth', 'false');
+                await removeToken();
+                store.dispatch(setIsAuth(false));
             } catch (e) {
                 console.log(e);
             }

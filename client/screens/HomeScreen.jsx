@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Image, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Box, Spinner, TextArea, Toast, } from 'native-base';
 import ScreenTitle from '../components/ScreenTitle';
 import WeatherSection from '../components/weather/WeatherSection';
 import DetailsSection from '../components/details/DetailsSection';
 import ButtonIcon from '../components/ButtonIcon';
 import * as Location from 'expo-location';
-import { getUserName } from '../services/apiClient';
+import { getUserName, removeToken } from '../services/apiClient';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchWeatherData, selectWeatherData } from '../redux/weatherReducer';
 import moment from 'moment';
@@ -14,6 +14,7 @@ import ErrorSection from '../components/ErrorSection';
 import SkeletonLoader from '../components/SceletonLoader';
 import { LOADING } from '../constants';
 import { postNewRecord, resetNewRecordLoadingState, selectNewRecordData } from '../redux/recordReducer';
+import { setIsAuth } from '../redux/userReducer';
 
 export default HomeScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -90,9 +91,18 @@ export default HomeScreen = ({ navigation }) => {
         dispatch(postNewRecord(params));
     };
 
+    const habdleSignOut = async () => {
+        await removeToken();
+        dispatch(setIsAuth(false));
+    };
+
     return (
-        <View style={styles.container}>
-            <ScreenTitle title={`Hey ${userName}, nice to meet you!`} />
+        <SafeAreaView style={styles.container}>
+            <Box mt='2' flexDir='row' justifyContent='space-around' w='90%' alignSelf='center'>
+                <ScreenTitle title={`Hey ${userName}, nice to meet you!`} />
+                <ButtonIcon handleClick={habdleSignOut} iconPath={require('../assets/icons/logOutIcon.png')} />
+            </Box>
+
             {error || locationError ?
                 <ErrorSection errorText={error || locationError} /> :
                 (<>
@@ -150,7 +160,7 @@ export default HomeScreen = ({ navigation }) => {
                     </Box>
                 </>)
             }
-        </View>
+        </SafeAreaView>
     );
 }
 

@@ -20,3 +20,7 @@ export const signIn = async ({ name, email, password }) => {
 
     return await apiClient.post('auth/signin/', params);
 };
+
+export const checkToken = async () => {
+    return apiClient.get('auth/check');
+};

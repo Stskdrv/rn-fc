@@ -8,9 +8,9 @@ const ScreenTitle = ({ title }) => {
             alignSelf="center"
             rounded='15'
             p='2'
-            w='90%'
+            w='85%'
             _text={{
-                fontSize: "25",
+                fontSize: "21",
                 fontWeight: "light",
                 color: "primary.50",
                 letterSpacing: "lg",
