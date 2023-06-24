@@ -7,7 +7,7 @@ import { setIsAuth } from '../redux/userReducer';
 const TOKEN_KEY = 'TOKEN_KEY';
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost:7000/api',
+    baseURL: 'https://fc-be.onrender.com/api',
     headers: {
         'Cache-Control': 'no-cache'
     },

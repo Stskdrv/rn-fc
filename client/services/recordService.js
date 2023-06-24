@@ -39,7 +39,7 @@ export const createRecord = async ({
                 ],
                 {
                     format: ImageManipulator.SaveFormat.JPEG,
-                    compress: 0.8
+                    compress: 0.6
                 },
             );
 

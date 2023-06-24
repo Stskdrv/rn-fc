@@ -1,4 +1,4 @@
-import { StyleSheet, View, } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { Box, FlatList } from 'native-base';
 import ScreenTitle from '../components/ScreenTitle';
@@ -11,7 +11,7 @@ const ForecastScreen = ({ navigation }) => {
     const forecastData = useRoute().params;
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <ScreenTitle title='Forecast for next  four days:' />
 
             <FlatList
@@ -31,7 +31,7 @@ const ForecastScreen = ({ navigation }) => {
             <Box alignSelf='center' mb='7%'  >
                 <ButtonIcon handleClick={() => navigation.navigate('Home')} iconPath={require('../assets/icons/homeIcon.png')} />
             </Box>
-        </View>
+        </SafeAreaView>
     );
 }
 

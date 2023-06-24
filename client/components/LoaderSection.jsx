@@ -1,8 +1,8 @@
-import { Box, Spinner, Text } from "native-base";
+import { Box, Image, Spinner, Text } from "native-base";
 import { StyleSheet, View } from "react-native";
 
 
-const LoaderSection = ({text}) => {
+const LoaderSection = ({ text, gifLogo }) => {
     return (
         <View style={styles.container}>
             <Box
@@ -17,7 +17,19 @@ const LoaderSection = ({text}) => {
                 shadowOpacity={0.3}
                 shadowRadius={4}
             >
-                <Spinner alignSelf='center' size='lg' color='primary.100' />
+                {
+                    gifLogo ?
+                        <Image
+                            w='100'
+                            h='100'
+                            rounded='100'
+                            alignSelf='center'
+                            source={require('../assets/icons/aLogo.gif')}
+                            alt="Loading Icon"
+
+                        /> :
+                        <Spinner alignSelf='center' size='lg' color='primary.100' />
+                }
                 <Text
                     fontSize='lg'
                     fontWeight='500'

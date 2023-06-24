@@ -22,6 +22,7 @@ const WeatherSection = ({weatherData}) => {
                         <WeatherData time={item.time} temp={item.temp} wind={item.wind} icon={item.icon} />
                     )
                 }}
+                scrollEnabled={false}
             />
         </Box>
     );

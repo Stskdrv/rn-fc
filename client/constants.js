@@ -6,7 +6,7 @@ export const LOADING = {
     REJECTED: 'rejected',
 };
 
-export const BASE_IMG_URL = 'http://localhost:7000/';
+export const BASE_IMG_URL = 'https://fc-be.onrender.com/';
 
 export const weatherIconsDictionary = {
     '113': require('./assets/icons/weatherIcons/113.png'),

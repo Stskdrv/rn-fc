@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Image, StyleSheet, View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
+import { Image, StyleSheet, View, Text, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { Box, Spinner, TextArea, Toast, } from 'native-base';
 import ScreenTitle from '../components/ScreenTitle';
 import WeatherSection from '../components/weather/WeatherSection';
@@ -98,59 +98,67 @@ export default HomeScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Box mt='2' flexDir='row' justifyContent='space-around' w='90%' alignSelf='center'>
+            <Box mt='4' flexDir='row' justifyContent='space-around' w='90%' alignSelf='center'>
                 <ScreenTitle title={`Hey ${userName}, nice to meet you!`} />
                 <ButtonIcon handleClick={habdleSignOut} iconPath={require('../assets/icons/logOutIcon.png')} />
             </Box>
 
             {error || locationError ?
                 <ErrorSection errorText={error || locationError} /> :
-                (<>
-                    <Box flexDir='row'>
-                        <Text style={styles.subtitleText}>
-                            {`Today is ${moment(new Date).format("MMM Do")},`}
-                        </Text>
-                        {isLoading === LOADING.FULFILLED && <TouchableOpacity onPress={() => navigation.navigate('Forecast', data?.forecast)} >
-                            <Text style={styles.buttonText}>
-                                Check next days!
+                (<KeyboardAvoidingView
+                    style={{ flex: 1 }}
+                    behavior={Platform.OS === 'ios' ? 'padding' : null}
+                    enabled
+                >
+                    <ScrollView keyboardShouldPersistTaps="handled">
+                        <Box flexDir='row' mt='4'>
+                            <Text style={styles.subtitleText}>
+                                {`Today is ${moment(new Date).format("MMM Do")},`}
                             </Text>
-                        </TouchableOpacity>}
-                    </Box>
+                            {isLoading === LOADING.FULFILLED && <TouchableOpacity onPress={() => navigation.navigate('Forecast', data?.forecast)} >
+                                <Text style={styles.buttonText}>
+                                    Check next days!
+                                </Text>
+                            </TouchableOpacity>}
+                        </Box>
+                        <View style={styles.middleSection}>
+                            {
+                                isLoading === LOADING.FULFILLED ?
+                                    (
+                                        <View>
+                                            <WeatherSection weatherData={data?.currentDay.weatherData} />
+                                            <DetailsSection detailsData={data?.currentDay.details} />
+                                        </View>
+                                    )
+                                    :
+                                    <SkeletonLoader />
+                            }
+                            <Image source={require('../assets/placeHolderImg.png')} />
+                        </View>
 
-                    <View style={styles.middleSection}>
-                        {
-                            isLoading === LOADING.FULFILLED ?
-                                (
-                                    <View>
-                                        <WeatherSection weatherData={data?.currentDay.weatherData} />
-                                        <DetailsSection detailsData={data?.currentDay.details} />
-                                    </View>
-                                )
-                                :
-                                <SkeletonLoader />
-                        }
-                        <Image source={require('../assets/placeHolderImg.png')} />
-                    </View>
 
-                    <Box>
-                        <Text style={styles.subtitleText}>
-                            What do you wear today?
-                        </Text>
-                        <TextArea
-                            mt='2'
-                            value={description}
-                            onChangeText={text => setDescription(text)}
-                            placeholder='Do you want to remember later in what clothes it was comfortable in this weather? Fill out this form!'
-                            w='85%'
-                            alignSelf='center'
-                            rounded='15'
-                            totalLines={4}
-                            fontSize='15'
-                            color='white'
-                            backgroundColor="primary.200"
-                        />
-                    </Box>
-                    <Box flexDir='row' justifyContent='space-around' mt='7'>
+
+                        <Box mt='4'>
+                            <Text style={styles.subtitleText}>
+                                What do you wear today?
+                            </Text>
+                            <TextArea
+                                mt='4'
+                                value={description}
+                                onChangeText={text => setDescription(text)}
+                                placeholder='Do you want to remember later in what clothes it was comfortable in this weather? Fill out this form!'
+                                w='85%'
+                                alignSelf='center'
+                                rounded='15'
+                                totalLines={4}
+                                fontSize='15'
+                                color='white'
+                                backgroundColor="primary.200"
+                            />
+                        </Box>
+                    </ScrollView>
+
+                    <Box flexDir='row' justifyContent='space-around' mt='9'>
                         <ButtonIcon disabled={isLoading !== LOADING.FULFILLED || error} handleClick={() => navigation.navigate('List')} iconPath={require('../assets/icons/listIcon.png')} />
                         <ButtonIcon disabled={isLoading !== LOADING.FULFILLED || error} handleClick={() => navigation.navigate('Camera', description)} iconPath={require('../assets/icons/cameraIcon.png')} />
                         {isNewRecordLoading === LOADING.PENDING ?
@@ -158,7 +166,7 @@ export default HomeScreen = ({ navigation }) => {
                             <ButtonIcon disabled={isLoading !== LOADING.FULFILLED || error || !description} handleClick={handleCreateNewRecord} iconPath={require('../assets/icons/saveIcon.png')} />
                         }
                     </Box>
-                </>)
+                </KeyboardAvoidingView>)
             }
         </SafeAreaView>
     );
@@ -170,7 +178,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#282B34'
     },
     middleSection: {
-        marginTop: 10,
+        marginTop: 30,
         flexDirection: 'row',
         justifyContent: 'space-around',
     },
