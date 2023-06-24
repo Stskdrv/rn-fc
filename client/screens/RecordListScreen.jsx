@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 import ScreenTitle from "../components/ScreenTitle";
 import RecordItem from "../components/RecordItem";
 import { Box } from "native-base";
@@ -36,13 +36,13 @@ const RecordListScreen = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <ScreenTitle title='Here are all your records:' />
             {renderRecords()}
             <Box position='absolute' alignSelf='center' bottom='5'>
                 <ButtonIcon handleClick={() => navigation.navigate('Home')} iconPath={require('../assets/icons/homeIcon.png')} />
             </Box>
-        </View>
+        </SafeAreaView>
     );
 };
 

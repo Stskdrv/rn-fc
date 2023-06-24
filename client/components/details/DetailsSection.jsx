@@ -18,7 +18,7 @@ const DetailsSection = ({ detailsData }) => {
                 detailsData ?
                     (
                         <Box
-                            mt='3'
+                            mt='5'
                             alignSelf='center'
                             rounded='15'
                             p='3'
@@ -36,6 +36,7 @@ const DetailsSection = ({ detailsData }) => {
                                         <DetailsData name={item.name} value={item.value} />
                                     )
                                 }}
+                                scrollEnabled={false}
                             />
                         </Box>
                     ) :

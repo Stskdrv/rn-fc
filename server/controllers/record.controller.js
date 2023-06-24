@@ -24,8 +24,8 @@ module.exports.newRecord = async (req, res) => {
       });
   
       if (existingRecord) {
-        existingRecord.imgSrc = file?.path  || '';
-        existingRecord.description = data.description || '';
+        if ( file?.path)  existingRecord.imgSrc = file?.path;
+        existingRecord.description = data.description;
         existingRecord.mintemp = data.mintemp;
         existingRecord.maxtemp = data.maxtemp;
         existingRecord.wind = data.wind;

@@ -9,6 +9,7 @@ import { useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { postNewRecord } from '../redux/recordReducer';
 import { selectWeatherData } from '../redux/weatherReducer';
+import LoaderSection from '../components/LoaderSection';
 
 const CameraScreen = ({ navigation }) => {
 

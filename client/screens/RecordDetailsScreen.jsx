@@ -1,8 +1,8 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
 import ScreenTitle from "../components/ScreenTitle";
 import { useEffect, useRef, useState } from "react";
 import { getUserName } from "../services/apiClient";
-import { AlertDialog, Box, Button, Image, Spinner, Text, Toast } from "native-base";
+import { AlertDialog, Box, Button, Image, Skeleton, Spinner, Text, Toast } from "native-base";
 import moment from "moment";
 import ButtonIcon from "../components/ButtonIcon";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -18,13 +18,20 @@ const RecordDetailsScreen = () => {
 
     const { isLoading, data, error } = useSelector(selectRemoveRecordData);
 
-    const { weatherData, description, imgSrc, _id } = useRoute().params;
+    const { weatherData, description, imgSrc, _id, date } = useRoute().params;
     console.log(BASE_IMG_URL + imgSrc);
 
     const [userName, setUserName] = useState('friend');
     const [isPreviewMode, setIsPreviewMode] = useState(false);
 
     const [isOpen, setIsOpen] = useState(false);
+
+    const [isImgLoading, setIsImgLoading] = useState(false);
+    const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+
+    const toggleImgLoading = () => setIsImgLoading(!isImgLoading)
+    const togglePreviewLoaded = () => setIsPreviewLoading(!isPreviewLoading);
+
 
     const toggleAlert = () => setIsOpen(!isOpen);
 
@@ -80,6 +87,17 @@ const RecordDetailsScreen = () => {
                     shadowRadius={4}
                     justifyContent='center'
                 >
+                    {
+                        isPreviewLoading &&
+                        <Skeleton
+                            position='absolute'
+                            alignSelf='center'
+                            w='100%'
+                            h='500'
+                            rounded='20'
+                            startColor='primary.150'
+                        />
+                    }
                     <Image
                         alignSelf='center'
                         w='100%'
@@ -87,7 +105,9 @@ const RecordDetailsScreen = () => {
                         rounded='20'
                         source={{ uri: BASE_IMG_URL + imgSrc }}
                         fallbackSource={require('../assets/icons/imgAltIcon.png')}
-                        alt='Image not found' />
+                        alt='Image not found'
+                        onLoadStart={togglePreviewLoaded}
+                        onLoadEnd={togglePreviewLoaded} />
                 </Box>
             </TouchableOpacity>
         )
@@ -95,7 +115,7 @@ const RecordDetailsScreen = () => {
 
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <ScreenTitle title={`Hey, ${userName}! How are you?`} />
             <Text
                 pt='4'
@@ -103,7 +123,7 @@ const RecordDetailsScreen = () => {
                 fontSize='20'
                 textAlign='center'
             >
-                {`It was ${moment('2023-06-11T19:16:12.022+00:00').format("MMM, Do")}`}
+                {`It was ${moment(date).format("MMM, Do")}`}
             </Text>
             {
                 isPreviewMode ? renderPreview() : (
@@ -140,6 +160,16 @@ const RecordDetailsScreen = () => {
                         </View>
                         <TouchableOpacity onPress={togglePreview}>
 
+                            {
+                                isImgLoading &&
+                                <Skeleton
+                                    position='absolute'
+                                    w='175'
+                                    h='100%'
+                                    rounded='20'
+                                    startColor='primary.200'
+                                />
+                            }
 
                             <Image
                                 w='175'
@@ -150,15 +180,15 @@ const RecordDetailsScreen = () => {
                                 }
                                 fallbackSource={require('../assets/placeHolderImg.png')}
                                 alt='Image not found'
+                                onLoadStart={toggleImgLoading}
+                                onLoadEnd={toggleImgLoading}
                             />
-
-
                         </TouchableOpacity>
                     </View>
                 )
             }
 
-            <Box flexDir='row' justifyContent='space-around' mt='7'>
+            <Box flexDir='row' justifyContent='space-around' mt='9' pt='10'>
                 <ButtonIcon handleClick={() => navigation.navigate('List')} iconPath={require('../assets/icons/backIcon.png')} />
                 <ButtonIcon handleClick={() => navigation.navigate('Home')} iconPath={require('../assets/icons/homeIcon.png')} />
                 {isLoading === LOADING.PENDING ?
@@ -172,8 +202,8 @@ const RecordDetailsScreen = () => {
                     <AlertDialog.CloseButton />
                     <AlertDialog.Header>Delete Record</AlertDialog.Header>
                     <AlertDialog.Body>
-                        This will remove this record. 
-                        This action cannot be reversed. 
+                        This will remove this record.
+                        This action cannot be reversed.
                         Are you sure?
                     </AlertDialog.Body>
                     <AlertDialog.Footer>
@@ -184,14 +214,14 @@ const RecordDetailsScreen = () => {
                             <Button colorScheme="danger" onPress={() => {
                                 toggleAlert();
                                 dispatch(removeRecord(_id))
-                                }}>
+                            }}>
                                 Delete
                             </Button>
                         </Button.Group>
                     </AlertDialog.Footer>
                 </AlertDialog.Content>
             </AlertDialog>
-        </View>
+        </SafeAreaView>
     )
 
 };

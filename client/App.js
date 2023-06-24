@@ -31,11 +31,11 @@ const AppFlow = () => (
   <AuthStack.Navigator initialRouteName='Home' screenOptions={{
     headerShown: false,
   }} >
-    <AuthStack.Screen name='Home' component={HomeScreen} />
-    <AuthStack.Screen name='Forecast' component={ForecastScreen} />
-    <AuthStack.Screen name='Camera' component={CameraScreen} />
-    <AuthStack.Screen name='List' component={RecordListScreen} />
-    <AuthStack.Screen name='Details' component={RecordDetailsScreen} />
+    <AppStack.Screen name='Home' component={HomeScreen} />
+    <AppStack.Screen name='Forecast' component={ForecastScreen} />
+    <AppStack.Screen name='Camera' component={CameraScreen} />
+    <AppStack.Screen name='List' component={RecordListScreen} />
+    <AppStack.Screen name='Details' component={RecordDetailsScreen} />
   </AuthStack.Navigator>
 )
 
@@ -51,7 +51,9 @@ const RootFlow = () => {
 
 
   if (isAuth === null) {
-    return <Stack.Screen name='Default' component={DefaultScreen} />;
+    return  <RootStack.Navigator screenOptions={{ headerShown: false }} >
+        <AppStack.Screen name='Default' component={DefaultScreen} />
+      </RootStack.Navigator>
   };
 
   return (
