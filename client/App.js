@@ -51,9 +51,9 @@ const RootFlow = () => {
 
 
   if (isAuth === null) {
-    return  <RootStack.Navigator screenOptions={{ headerShown: false }} >
-        <AppStack.Screen name='Default' component={DefaultScreen} />
-      </RootStack.Navigator>
+    return <RootStack.Navigator screenOptions={{ headerShown: false }} >
+    <AppStack.Screen name='Default' component={DefaultScreen} />
+  </RootStack.Navigator>
   };
 
   return (
