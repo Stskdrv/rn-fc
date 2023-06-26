@@ -48,6 +48,14 @@ export default HomeScreen = ({ navigation }) => {
     }, [location]);
 
     useEffect(() => {
+
+        const token = (() => getToken())();
+        if (!token) {
+            dispatch(setIsAuth(false));
+        }
+    }, []);
+
+    useEffect(() => {
         const handleUserName = async () => {
             try {
                 const username = await getUserName();

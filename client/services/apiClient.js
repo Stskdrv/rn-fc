@@ -31,8 +31,8 @@ export const getUserName = async () => {
    return name;
 };
 
-const getToken = async (tokenKey) => {
-    return await SecureStore.getItemAsync(tokenKey);
+export const getToken = async () => {
+    return await SecureStore.getItemAsync(TOKEN_KEY);
 };
 
 export const removeToken = async () => {
@@ -42,7 +42,7 @@ export const removeToken = async () => {
 apiClient.interceptors.request.use(
     async (config) => {
         try {
-            const token = await getToken(TOKEN_KEY);
+            const token = await getToken();
             if (token && config.url !== 'auth/signin/' && config.url !== 'auth/signup/') {
                 // TODO: check headers
                 config.headers['Authorization'] = token;
